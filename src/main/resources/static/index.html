@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Planner Application</title>
+    <link type="text/css" href="css/style.css" rel="stylesheet" />
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/js-cookie/js.cookie.js"></script>
+ 	   <script type="text/javascript">
+        $.ajaxSetup({
+                beforeSend : function(xhr, settings) {
+                    if (settings.type == 'POST' || settings.type == 'PUT'
+                        || settings.type == 'DELETE') {
+                        if (!(/^http:.*/.test(settings.url) || /^https:.*/
+                            .test(settings.url))) {
+                            // Only send the token to relative URLs i.e. locally.
+                            xhr.setRequestHeader("X-XSRF-TOKEN",
+                                Cookies.get('XSRF-TOKEN'));
+                        }
+                    }
+                }
+            });
+        $.get("/user", function(data) {
+            $("#user").html(data.userAuthentication.details.name);
+            $("#userSub").html(data.userAuthentication.details.sub);
+            $("#userEmail").html(data.userAuthentication.details.email);
+            $("#provider").html(data.userAuthentication.details.identities[0].provider);
+            $(".unauthenticated").hide()
+            $(".authenticated").show()
+        }).fail(function() {
+            $(".unauthenticated").show()
+            $(".authenticated").hide()
+        });
+ 
+        <!-- In this case, we will call GET /userInfo, and this will give us back a string with userinfo details from Principal user -->
+        $.get("/userInfo", function(data) {
+            $("#userInfoString").html(data);
+            $(".unauthenticated").hide()
+            $(".authenticated").show()
+        }).fail(function() {
+            $(".unauthenticated").show()
+            $(".authenticated").hide()
+        });
+ 
+        var logout = function() {
+            $.post("/logout", function() {
+                $("#user").html('');
+                $(".unauthenticated").show();
+                $(".authenticated").hide();
+            })
+            return true;
+        }
+        
+        function loadWatson(){
+	  window.watsonAssistantChatOptions = {
+	      integrationID: "009f5a14-9ca4-483a-86a5-b244d60f549d", // The ID of this integration.
+	      region: "eu-gb", // The region your integration is hosted in.
+	      serviceInstanceID: "65501fa9-a27b-475b-9b17-32dc427cc362", // The ID of your service instance.
+	      onLoad: function(instance) { instance.render(); }
+	    };
+	  	setTimeout(function(){
+		    const t=document.createElement('script');
+		    t.src="https://web-chat.global.assistant.watson.appdomain.cloud/loadWatsonAssistantChat.js";
+		    document.head.appendChild(t);
+		  });
+ 		}
+
+    </script>
+</head>
+<body >
+<div class="container unauthenticated" style="text-align: center;">
+	<div style="background-color:olive; align-content: center;">
+		<br><br>
+	    <span style="font-size: xx-large; color: white; font-weight: bold;">Welcome </span>
+	    <span style="font-size: xx-large; color: white;font-weight: bold;"> to Health Advisor API</span>
+		<br>
+		<br>
+	</div>
+	<br><br>
+		<div  style="font-size: x-large; align-content: center;">
+		    <div>
+		    	<img alt="Amban_Logo" src="Amban_Logo_Plus.png" style="width: 30%;height: 30%;">
+		    </div>
+		    <span >Please </span>
+		    <a href="/login" style="background-color: white;">Login</a>
+		    <span> to continue</span>
+		</div>
+</div> 
+
+
+<div class="container authenticated" style="text-align: center;" >
+	<div style="background-color:olive;"><a href="/logout" style="font-size: large; color: white; font-weight: bold; align-content: center; " >Logout</a></div>
+    
+    <div style="background-color:olive;">
+		
+			<img alt="Amban_Logo" src="Amban_Logo_Plus.png" style="width: 4%;height: 4%;">
+		    <!-- <button onclick="loadWatson();" style="background-color: white; height: 30px; ">Watson Chat</button> -->
+		    <span style="font-size: xx-large; color: white; font-weight: bold;  padding-left: 15%">Welcome </span>
+		    <span id="user" style="font-size: xx-large; color: maroon; font-weight: bold;"></span>
+		    <span style="font-size: xx-large; color: white;font-weight: bold; padding-right: 15%"> to Health Advisor API</span>
+		    <button onclick="loadWatson();" style="background-color: white; height: 30px; ">  Watson Chat  </button>
+		    <!-- <button style="background-color: white; height: 30px; ">
+		    	<a href="/logout" >Logout</a>
+		    </button>
+		     -->
+		<br><br>
+	</div>
+	<div >
+    	<iframe src="https://healthplannerservices-cc-uc-3-amban.container-crush-01-4044f3a4e314f4bcb433696c70d13be9-0000.che01.containers.appdomain.cloud/swagger-ui.html" width="100%" height="900" style="border:1px solid black;"></iframe>
+    </div> 
+</div>
+
+</body>
+</html>

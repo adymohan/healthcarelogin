@@ -1,0 +1,10 @@
+security:
+ oauth2:
+  client:
+   clientId: 42b0fb68-ff33-45bf-9e76-e17bca512fb4
+   clientSecret: MjcyY2RiOWMtOWQwOC00MWQ3LWE2MWItZDJiZDllNmUxMWNk
+   accessTokenUri: https://au-syd.appid.cloud.ibm.com/oauth/v4/8722ec8f-85bf-445d-b585-d342ce17f062/token
+   userAuthorizationUri: https://au-syd.appid.cloud.ibm.com/oauth/v4/8722ec8f-85bf-445d-b585-d342ce17f062/authorization
+  resource:
+   userInfoUri: https://au-syd.appid.cloud.ibm.com/oauth/v4/8722ec8f-85bf-445d-b585-d342ce17f062/userinfo
+
